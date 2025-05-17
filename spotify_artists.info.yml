@@ -1,0 +1,5 @@
+name: Spotify Artists
+type: module
+description: 'Connects to Spotify API to display artist information.'
+core_version_requirement: ^11
+package: Custom
