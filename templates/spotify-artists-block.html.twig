@@ -1,0 +1,25 @@
+{#
+/**
+ * @file
+ * Default theme implementation for Spotify artists block.
+ *
+ * Available variables:
+ * - artists: An array of artist information.
+ *   - name: The name of the artist.
+ *   - id: The Spotify ID for the artist.
+ */
+#}
+
+{% if artists %}
+  <div class="spotify-artists-list">
+    <ul>
+      {% for artist in artists %}
+        <li class="spotify-artist">
+          <span class="spotify-artist__name">{{ artist.name }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% else %}
+  <p>{{ 'No artists configured.'|t }}</p>
+{% endif %}

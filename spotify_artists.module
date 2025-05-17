@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function spotify_artists_theme(): array {
+  return [
+    'spotify_artists_block' => [
+      'variables' => [
+        'artists' => [],
+      ],
+    ],
+  ];
+}

@@ -1,0 +1,22 @@
+.spotify-artists-list {
+  margin: 1em 0;
+}
+
+.spotify-artists-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.spotify-artist {
+  padding: 0.5em 0;
+  border-bottom: 1px solid #eee;
+}
+
+.spotify-artist:last-child {
+  border-bottom: none;
+}
+
+.spotify-artist.is-active .spotify-artist__link {
+  font-weight: bold;
+}

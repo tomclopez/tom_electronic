@@ -1,0 +1,58 @@
+<?php
+
+/**
+ * @file
+ */
+
+declare(strict_types=1);
+
+use Drupal\block\Entity\Block;
+use Drupal\Core\Entity\EntityStorageException;
+
+/**
+ * Implements hook_install().
+ * Places the spotify artists block in the sidebar.
+ */
+function spotify_artists_install(): void {
+  $theme = \Drupal::config('system.theme')->get('default');
+
+  $regions = \Drupal::service('theme_handler')->getTheme($theme)->info['regions'];
+  $region = isset($regions['sidebar_first']) ? 'sidebar_first' : 'content';
+
+  $block_id = $theme . '_spotify_artists_list';
+
+  try {
+    $block_storage = \Drupal::entityTypeManager()->getStorage('block');
+    $existing_block = $block_storage->load($block_id);
+
+    if (!$existing_block) {
+      $values = [
+        'id' => $block_id,
+        'plugin' => 'spotify_artists_list',
+        'theme' => $theme,
+        'region' => $region,
+        'weight' => 0,
+        'visibility' => [],
+        'settings' => [
+          'id' => 'spotify_artists_list',
+          'label' => t('Spotify Artists'),
+          'label_display' => 'visible',
+          'provider' => 'spotify_artists',
+        ],
+      ];
+
+      $block = Block::create($values);
+      $block->save();
+
+      \Drupal::messenger()->addStatus(t('The Spotify Artists block has been placed in the @region region.', [
+        '@region' => $region,
+      ]));
+    }
+  }
+  catch (EntityStorageException $e) {
+    \Drupal::logger('spotify_artists')->error('Failed to create the Spotify Artists block: @message', [
+      '@message' => $e->getMessage(),
+    ]);
+  }
+
+}
