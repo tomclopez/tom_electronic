@@ -1,0 +1,6 @@
+spotify_artists.settings:
+  title: 'Spotify Artists'
+  description: 'Configure Spotify artist IDs.'
+  parent: system.admin_config_media
+  route_name: spotify_artists.settings
+  weight: 100

@@ -1,0 +1,17 @@
+spotify_artists.settings:
+  type: config_object
+  label: 'Spotify Artists settings'
+  mapping:
+    artists:
+      type: sequence
+      label: 'Artist IDs'
+      sequence:
+        type: mapping
+        label: 'Artist'
+        mapping:
+          id:
+            type: string
+            label: 'Spotify Artist ID'
+          weight:
+            type: integer
+            label: 'Weight'

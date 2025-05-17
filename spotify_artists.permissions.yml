@@ -1,0 +1,4 @@
+administer spotify artists:
+  title: 'Administer Spotify Artists'
+  description: 'Configure Spotify artist IDs and settings.'
+  restrict access: true

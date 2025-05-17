@@ -1,0 +1,9 @@
+spotify_artists.settings:
+  path: '/admin/config/media/spotify-artists'
+  defaults:
+    _form: 'Drupal\spotify_artists\Form\SettingsForm'
+    _title: 'Spotify Artists Settings'
+  requirements:
+    _permission: 'administer spotify artists'
+  options:
+    _admin_route: true
