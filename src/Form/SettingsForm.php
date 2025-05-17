@@ -6,6 +6,11 @@ namespace Drupal\spotify_artists\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\spotify_artists\SpotifyApiClientInterface;
+use Drupal\spotify_artists\Exception\ArtistNotFoundException;
+use Drupal\spotify_artists\Exception\InvalidArtistIdException;
+use Drupal\spotify_artists\Exception\SpotifyAuthException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Configuration form for Spotify Artists module.
@@ -13,6 +18,17 @@ use Drupal\Core\Form\FormStateInterface;
 final class SettingsForm extends ConfigFormBase {
 
   private const MAX_ARTISTS = 20;
+
+  protected SpotifyApiClientInterface $spotifyClient;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): object {
+    $instance = parent::create($container);
+    $instance->spotifyClient = $container->get('spotify_artists.api_client');
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -49,7 +65,7 @@ final class SettingsForm extends ConfigFormBase {
 
     $form['help'] = [
       '#type' => 'markup',
-      '#markup' => '<p>' . $this->t('Enter Spotify artist IDs. You can find an artist ID from their Spotify URL or URI.') . '</p>',
+      '#markup' => '<p>' . $this->t('Enter Spotify artist IDs. You can find an artist ID from their Spotify URL.') . '</p>',
     ];
 
     $form['artists_container'] = [
@@ -65,11 +81,25 @@ final class SettingsForm extends ConfigFormBase {
     ];
 
     foreach ($artist_values as $delta => $artist_id) {
+      $description = $this->t('Enter a valid Spotify artist ID (22 characters, alphanumeric).');
+
+      if ($artist_id !== NULL && $artist_id !== '') {
+        try {
+          $artist_name = $this->spotifyClient->getArtistName($artist_id);
+          if ($artist_name !== (string) $this->t('Unknown artist')) {
+            $description = $this->t('Artist: @name', ['@name' => $artist_name]);
+          }
+        }
+        catch (\Exception $e) {
+          // If there's an error, just use the default description.
+        }
+      }
+
       $form['artists_container']['artists'][$delta] = [
         '#type' => 'textfield',
         '#title' => $this->t('Artist ID @num', ['@num' => $delta + 1]),
         '#default_value' => $artist_id,
-        '#description' => $this->t('Enter a valid Spotify artist ID (22 characters, alphanumeric).'),
+        '#description' => $description,
         '#maxlength' => 22,
         '#size' => 30,
       ];
@@ -159,34 +189,54 @@ final class SettingsForm extends ConfigFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state): void {
     parent::validateForm($form, $form_state);
 
-    if ($form_state->getTriggeringElement()['#id'] === 'edit-submit') {
-      $artist_values = $form_state->getValue('artists', []);
+    if ($form_state->getTriggeringElement()['#id'] != 'edit-submit') {
+      return;
+    }
 
-      if (count($artist_values) > self::MAX_ARTISTS) {
-        $form_state->setErrorByName(
-          'artists',
-          $this->t('You cannot have more than @max artists.', [
-            '@max' => self::MAX_ARTISTS,
-          ])
-        );
-        return;
+    $artist_values = $form_state->getValue('artists', []);
+
+    if (count($artist_values) > self::MAX_ARTISTS) {
+      $form_state->setErrorByName(
+        'artists',
+        $this->t('You cannot have more than @max artists.', [
+          '@max' => self::MAX_ARTISTS,
+        ])
+      );
+      return;
+    }
+
+    foreach ($artist_values as $delta => $artist_id) {
+      $artist_id = trim($artist_id ?? '');
+
+      if ($artist_id === '') {
+        continue;
       }
 
-      foreach ($artist_values as $delta => $artist_id) {
-        $artist_id = trim($artist_id ?? '');
-
-        if ($artist_id === '') {
-          continue;
+      if (!preg_match('/^[a-zA-Z0-9]{22}$/', $artist_id)) {
+        $form_state->setErrorByName(
+          "artists][$delta",
+          $this->t('The artist ID must be 22 characters and contain only letters and numbers.')
+        );
+      }
+      else {
+        try {
+          $this->spotifyClient->getArtistDetails($artist_id);
         }
-
-        if (!preg_match('/^[a-zA-Z0-9]{22}$/', $artist_id)) {
+        catch (InvalidArtistIdException | ArtistNotFoundException $e) {
           $form_state->setErrorByName(
             "artists][$delta",
-            $this->t('The artist ID must be 22 characters and contain only letters and numbers.')
+            $this->t('Artist ID "@id" does not exist in Spotify.', ['@id' => $artist_id])
           );
+        }
+        catch (SpotifyAuthException $e) {
+          // For auth errors, warn but don't prevent saving.
+          $this->messenger()->addWarning($this->t('Could not verify artist "@id" due to authentication issues. Please check your Spotify API credentials.', [
+            '@id' => $artist_id,
+          ]));
         }
       }
     }
+
   }
 
   /**
@@ -199,6 +249,7 @@ final class SettingsForm extends ConfigFormBase {
     foreach ($artist_values as $weight => $artist_id) {
       $artist_id = trim($artist_id ?? '');
 
+      // Only save non-empty values.
       if ($artist_id !== '') {
         $artists[] = [
           'id' => $artist_id,

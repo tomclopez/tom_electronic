@@ -1,0 +1,8 @@
+services:
+  spotify_artists.api_client:
+    class: Drupal\spotify_artists\SpotifyApiClient
+    arguments:
+      - '@http_client'
+      - '@cache.default'
+      - '@config.factory'
+      - '@logger.factory'
