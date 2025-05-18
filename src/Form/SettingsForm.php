@@ -205,12 +205,24 @@ final class SettingsForm extends ConfigFormBase {
       return;
     }
 
+    $seen_artist_ids = [];
+
     foreach ($artist_values as $delta => $artist_id) {
       $artist_id = trim($artist_id ?? '');
 
       if ($artist_id === '') {
         continue;
       }
+
+      if (in_array($artist_id, $seen_artist_ids)) {
+        $form_state->setErrorByName(
+          "artists][$delta",
+          $this->t('Artist ID "@id" is already in the list. Duplicate artist IDs are not allowed.', ['@id' => $artist_id])
+        );
+        continue;
+      }
+
+      $seen_artist_ids[] = $artist_id;
 
       if (!preg_match('/^[a-zA-Z0-9]{22}$/', $artist_id)) {
         $form_state->setErrorByName(
