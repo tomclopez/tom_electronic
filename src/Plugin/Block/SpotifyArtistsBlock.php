@@ -11,6 +11,7 @@ use Drupal\Core\Logger\LoggerChannelTrait;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Url;
 use Drupal\spotify_artists\SpotifyApiClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -112,10 +113,17 @@ final class SpotifyArtistsBlock extends BlockBase implements ContainerFactoryPlu
         $error_count++;
         continue;
       }
+
       $item = [
         'name' => $artist_name,
         'id' => $artist_id,
       ];
+
+      // Only add URL for logged-in users.
+      if ($this->currentUser->isAuthenticated()) {
+        $item['url'] = Url::fromRoute('spotify_artists.artist_details', ['artist_id' => $artist_id]);
+      }
+
       $items[] = $item;
     }
 

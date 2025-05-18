@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Display Spotify artist details.
+ *
+ * Available variables:
+ * - artist: An array containing the artist's information with the following keys:
+ *   - name: The artist's name (string).
+ *   - genres: An array of music genres associated with the artist.
+ *   - image: URL to the artist's profile image (string).
+ *   - popularity: The artist's popularity score from 0-100 (integer).
+ *   - followers: The number of followers the artist has on Spotify (integer).
+ *
+ */
+#}
+<div class="spotify-artist-details">  
+  {% if artist.image %}
+    <img src="{{ artist.image }}" alt="{{ artist.name }}" />
+  {% endif %}
+  
+  {% if artist.genres is not empty %}
+    <h2>{{ 'Genres'|t }}</h2>
+    <ul>
+      {% for genre in artist.genres %}
+        <li>{{ genre }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  
+  <div>
+    <p><strong>{{ 'Popularity'|t }}:</strong> {{ artist.popularity }}/100</p>
+    <p><strong>{{ 'Followers'|t }}:</strong> {{ artist.followers|number_format }}</p>
+  </div>
+</div>

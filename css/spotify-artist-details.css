@@ -1,0 +1,15 @@
+.spotify-artist-details {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.spotify-artist-details img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.spotify-artist-details ul {
+  padding-left: 20px;
+}

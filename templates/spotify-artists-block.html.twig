@@ -1,12 +1,13 @@
 {#
 /**
  * @file
- * Default theme implementation for Spotify artists block.
+ * Spotify artists block.
  *
  * Available variables:
  * - artists: An array of artist information.
  *   - name: The name of the artist.
  *   - id: The Spotify ID for the artist.
+ *   - url: The URL object for the artist detail page.
  */
 #}
 
@@ -15,7 +16,13 @@
     <ul>
       {% for artist in artists %}
         <li class="spotify-artist">
-          <span class="spotify-artist__name">{{ artist.name }}</span>
+           {% if artist.url %}
+            <a href="{{ artist.url }}" class="spotify-artist__link">
+              <span class="spotify-artist__name">{{ artist.name }}</span>
+            </a>
+          {% else %}
+            <span class="spotify-artist__name">{{ artist.name }}</span>
+          {% endif %}
         </li>
       {% endfor %}
     </ul>

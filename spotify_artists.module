@@ -14,5 +14,11 @@ function spotify_artists_theme(): array {
         'artists' => [],
       ],
     ],
+    'spotify_artist_details' => [
+      'variables' => [
+        'artist' => [],
+      ],
+      'template' => 'spotify-artist-details',
+    ],
   ];
 }

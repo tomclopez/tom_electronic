@@ -7,3 +7,11 @@ spotify_artists.settings:
     _permission: 'administer spotify artists'
   options:
     _admin_route: true
+spotify_artists.artist_details:
+  path: '/artist/{artist_id}'
+  defaults:
+    _controller: '\Drupal\spotify_artists\Controller\SpotifyArtistController::artistDetails'
+    _title_callback: '\Drupal\spotify_artists\Controller\SpotifyArtistController::getArtistTitle'
+  requirements:
+    _permission: 'access content'
+    _user_is_logged_in: 'TRUE'
