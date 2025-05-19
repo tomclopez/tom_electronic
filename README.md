@@ -40,3 +40,4 @@ If I'd had a little more time, I was thinking to implement:
 * Draggable items on the config page to order the block display.
 * Unit tests.
 * Some code quality tests in a CI Pipeline.
+* Serve a 404 page when artists aren't in the configuration. (Currently serving a 403, which was a quick last minute fix to the issue of all spotify artists being available.)

@@ -13,5 +13,7 @@ spotify_artists.artist_details:
     _controller: '\Drupal\spotify_artists\Controller\SpotifyArtistController::artistDetails'
     _title_callback: '\Drupal\spotify_artists\Controller\SpotifyArtistController::getArtistTitle'
   requirements:
-    _permission: 'access content'
+    _configured_artist_access_check: 'TRUE'
     _user_is_logged_in: 'TRUE'
+    _permission: 'access content'
+
