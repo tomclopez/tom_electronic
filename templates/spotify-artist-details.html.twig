@@ -5,6 +5,7 @@
  *
  * Available variables:
  * - artist: An array containing the artist's information with the following keys:
+ *   - id: The Spotify ID for the artist.
  *   - name: The artist's name (string).
  *   - genres: An array of music genres associated with the artist.
  *   - image: URL to the artist's profile image (string).
@@ -13,22 +14,43 @@
  *
  */
 #}
-<div class="spotify-artist-details">  
-  {% if artist.image %}
-    <img src="{{ artist.image }}" alt="{{ artist.name }}" />
-  {% endif %}
-  
-  {% if artist.genres is not empty %}
-    <h2>{{ 'Genres'|t }}</h2>
-    <ul>
-      {% for genre in artist.genres %}
-        <li>{{ genre }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-  
-  <div>
-    <p><strong>{{ 'Popularity'|t }}:</strong> {{ artist.popularity }}/100</p>
-    <p><strong>{{ 'Followers'|t }}:</strong> {{ artist.followers|number_format }}</p>
+<div class="artist-page">
+  <div class="artist-header">
+    <h1>{{ artist.name }}</h1>
+    
+    {% if artist.image %}
+      <img src="{{ artist.image }}" alt="{{ artist.name }}" class="artist-image" />
+    {% endif %}
+    
+    <div class="artist-stats">
+      {% if artist.genres %}
+        <div class="genres">
+          <h3>{{ 'Genres'|t }}</h3>
+          <ul>
+          {% for genre in artist.genres %}
+            <li>{{ genre }}</li>
+          {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      
+      <div class="popularity">
+        <h3>{{ 'Popularity'|t }}</h3>
+        <div class="meter">
+          <div class="meter-fill" style="width: {{ artist.popularity }}%"></div>
+        </div>
+        <span>{{ artist.popularity }}/100</span>
+      </div>
+      
+      <div class="followers">
+        <h3>{{ 'Followers'|t }}</h3>
+        <span>{{ artist.followers|number_format }}</span>
+      </div>
+      
+      <a href="https://open.spotify.com/artist/{{ artist.id }}" class="spotify-button" target="_blank">
+        {{ 'Open in Spotify'|t }}
+      </a>
+    </div>
   </div>
+  
 </div>

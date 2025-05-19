@@ -1,15 +1,131 @@
-.spotify-artist-details {
-  max-width: 800px;
+.artist-page {
+  max-width: 900px;
   margin: 0 auto;
+  padding: 20px;
+  color: #fff;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
 }
 
-.spotify-artist-details img {
-  max-width: 100%;
-  height: auto;
+.artist-page h1 {
+  font-size: 32px;
+  margin: 0 0 20px;
+}
+
+.artist-header {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  background: #121212;
+  padding: 25px;
   border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.artist-stats {
+  flex: 1;
+  min-width: 250px;
+}
+
+.artist-stats h3 {
+  color: #b3b3b3;
+  font-size: 14px;
+  text-transform: uppercase;
+  margin: 20px 0 10px;
+  letter-spacing: 1px;
+}
+
+.artist-stats h3:first-child {
+  margin-top: 0;
+}
+
+.genres ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.genres li {
+  background: #333;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  display: inline-block;
+}
+
+.genres li:hover {
+  background: #1db954;
+  cursor: default;
+}
+
+.popularity {
+  margin: 20px 0;
+}
+
+.meter {
+  height: 8px;
+  background: #333;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  width: 100%;
+  max-width: 200px;
+}
+
+.meter-fill {
+  background-color: #1db954;
+  height: 100%;
+}
+
+.followers {
   margin-bottom: 20px;
 }
 
-.spotify-artist-details ul {
-  padding-left: 20px;
+.followers span {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.spotify-button {
+  display: inline-block;
+  background: #1db954;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.spotify-button:hover {
+  background: #1ed760;
+  transform: scale(1.05);
+  transition: all 0.2s;
+}
+
+.spotify-button:before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 496 512'%3E%3Cpath fill='white' d='M248 8C111.1 8 0 119.1 0 256s111.1 248 248 248 248-111.1 248-248S384.9 8 248 8zm100.7 364.9c-4.2 0-6.8-1.3-10.7-3.6-62.4-37.6-135-39.2-206.7-24.5-3.9 1-9 2.6-11.9 2.6-9.7 0-15.8-7.7-15.8-15.8 0-10.3 6.1-15.2 13.6-16.8 81.9-18.1 165.6-16.5 237 30.2 6.1 3.9 9.7 7.4 9.7 16.5s-7.1 15.4-15.2 15.4zm26.9-65.6c-5.2 0-8.7-2.3-12.3-4.2-62.5-37-155.7-51.9-238.6-29.4-4.8 1.3-7.4 2.6-11.9 2.6-10.7 0-19.4-8.7-19.4-19.4s5.2-17.8 15.5-20.7c27.8-7.8 56.2-13.6 97.8-13.6 64.9 0 127.6 16.1 177 45.5 8.1 4.8 11.3 11 11.3 19.7-.1 10.8-8.5 19.5-19.4 19.5z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+  .artist-header {
+    flex-direction: column;
+  }
+
+  .artist-image {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto 20px;
+    display: block;
+  }
 }

@@ -276,6 +276,7 @@ class SpotifyApiClient implements SpotifyApiClientInterface {
    */
   protected function processArtistData(array $data): array {
     return [
+      'id' => $data['id'] ?? '',
       'name' => $data['name'] ?? 'Unknown artist',
       'genres' => $data['genres'] ?? [],
       'image' => $data['images'][0]['url'] ?? '',

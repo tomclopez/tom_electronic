@@ -35,6 +35,5 @@ If I'd had a little more time, I was thinking to implement:
 * Some more information like "related artists", although it looks like this is not available anymore: https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api
 * An embedded player for the artists top tracks
 * Draggable items on the config page to order the block display.
-* A nicer layout for the artist display page.
 * Unit tests.
 * Some code quality tests in a CI Pipeline.

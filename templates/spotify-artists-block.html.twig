@@ -7,26 +7,31 @@
  * - artists: An array of artist information.
  *   - name: The name of the artist.
  *   - id: The Spotify ID for the artist.
- *   - url: The URL object for the artist detail page.
+ *   - url: The URL object for the artist detail page (only for logged-in users).
  */
 #}
-
 {% if artists %}
-  <div class="spotify-artists-list">
-    <ul>
+  <div class="spotify-block">
+    <h2>{{ 'Featured Artists'|t }}</h2>
+    <ul class="artist-list">
       {% for artist in artists %}
-        <li class="spotify-artist">
-           {% if artist.url %}
-            <a href="{{ artist.url }}" class="spotify-artist__link">
-              <span class="spotify-artist__name">{{ artist.name }}</span>
+        <li class="artist-item {{ artist.url ? 'has-link' : '' }}">
+          {% if artist.url %}
+            <a href="{{ artist.url }}">
+              <i class="spotify-icon"></i>
+              {{ artist.name }}
+              <span class="arrow-icon"></span>
             </a>
           {% else %}
-            <span class="spotify-artist__name">{{ artist.name }}</span>
+            <div class="artist-name">
+              <i class="spotify-icon"></i>
+              {{ artist.name }}
+            </div>
           {% endif %}
         </li>
       {% endfor %}
     </ul>
   </div>
 {% else %}
-  <p>{{ 'No artists configured.'|t }}</p>
+  <p class="empty-message">{{ 'No artists found.'|t }}</p>
 {% endif %}
